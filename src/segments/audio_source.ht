@@ -1,0 +1,83 @@
+import "module:std" as std
+
+class AudioSourceEndpoint {
+  var api
+  var lastFastestProxy
+
+  construct (api) {
+    this.api = api
+    this.lastFastestProxy = null
+  }
+
+  fun supportedPresets() {
+    return ["m4a", "flac", "mp3"]
+  }
+
+  fun proxyFetch(path) {
+    var proxies = [
+      "https://hfapi.dyamuh.dev",
+      "https://hfapi.aluratech.org",
+      "https://api.studentsneed.help",
+      "https://hifi-one.spotisaver.net",
+      "https://hifi-two.spotisaver.net",
+      "https://singapore-1.monochrome.tf",
+      "https://hifi.geeked.wtf",
+      "https://wolf.qqdl.site",
+      "https://maus.qqdl.site",
+      "https://vogel.qqdl.site",
+      "https://katze.qqdl.site",
+      "https://hund.qqdl.site"
+    ]
+
+    var i = 0
+    while (i < proxies.length) {
+      var baseUrl = proxies[i]
+      var url = baseUrl + path
+      var response = this.api["get"](url)
+
+      if (response != null) {
+        if (response.statusCode == 200) {
+          this.lastFastestProxy = baseUrl
+          return response.bodyAsJson()
+        }
+      }
+      i = i + 1
+    }
+    throw "Tidal fetch failed"
+  }
+
+  fun matches(track) {
+    var name = track["name"]
+    var data = this.proxyFetch("/v1/search/tracks?query=" + name + "&limit=1")
+
+    if (data == null) return []
+    var items = data["items"]
+    if (items == null) return []
+    if (items.length == 0) return []
+
+    var item = items[0]
+    return [{
+      "id": item["id"].toString(),
+      "title": item["title"],
+      "duration": item["duration"],
+      "author": "Tidal"
+    }]
+  }
+
+  fun streams(matched) {
+    var id = matched["id"]
+    var data = this.proxyFetch("/v1/tracks/" + id + "/playbackinfo?playbackMode=STREAM&assetPresentation=FULL")
+
+    if (data == null) throw "No data"
+    var url = data["url"]
+    if (url == null) throw "No stream URL"
+
+    return [{
+      "url": url,
+      "container": "m4a",
+      "quality": "medium"
+    }]
+  }
+}
+
+export { AudioSourceEndpoint }

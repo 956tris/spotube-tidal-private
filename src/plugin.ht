@@ -1,0 +1,25 @@
+import "module:std" as std
+import { AudioSourceEndpoint } from './segments/audio_source.ht'
+import { CorePlugin } from './segments/core.ht'
+
+var HttpClient = std.HttpClient
+var HttpBaseOptions = std.HttpBaseOptions
+
+class TidalFastProxyPlugin {
+  var audioSource: AudioSourceEndpoint
+  var core: CorePlugin
+  var api: HttpClient
+
+  construct (){
+    api = HttpClient(
+      HttpBaseOptions(
+        baseUrl: ""
+      )
+    )
+
+    core = CorePlugin()
+    audioSource = AudioSourceEndpoint(api)
+  }
+}
+
+export { TidalFastProxyPlugin }

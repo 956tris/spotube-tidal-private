@@ -1,11 +1,11 @@
 {
   "version": "1.0.0",
-  "name": "tidal-fast-proxy",
+  "name": "Tidal Fast Proxy",
   "author": "Spotube User",
   "description": "High-speed Tidal audio source using unofficial proxies.",
-  "entryPoint": "TemplateMetadataProviderPlugin",
-  "apis": ["localstorage"],
-  "abilities": ["audioSource"],
+  "entryPoint": "TidalFastProxyPlugin",
+  "apis": [],
+  "abilities": ["audio-source"],
   "repository": "https://github.com/KRTirtho/spotube-plugin-template",
-  "pluginApiVersion": "2.0.0"
+  "pluginApiVersion": "1.1.0"
 }

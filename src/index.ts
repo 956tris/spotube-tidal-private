@@ -1,7 +1,7 @@
-import AudioSourceEndpoint from './segments/audio_source.js'
+import AudioSourceEndpoint from './segments/audio_source'
 import type { IPlugin } from "@spotube-app/plugin"
 
-export default class TemplateMetadataProviderPlugin implements IPlugin {
+export class TidalFastProxy implements IPlugin {
   audioSource: AudioSourceEndpoint;
 
   constructor (){    
